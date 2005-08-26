@@ -12,8 +12,11 @@
  * of arbitrary size.
  *
  * $Log$
- * Revision 1.1  2005/08/26 20:18:07  sarnold
- * Initial revision
+ * Revision 1.2  2005/08/26 21:29:54  sarnold
+ * minor fixes and cleanup
+ *
+ * Revision 1.1.1.1  2005/08/26 20:18:07  sarnold
+ * initial 1-D median filter demo
  *
  *
  *
@@ -27,8 +30,6 @@ static const char rcsid[] =
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-/*------------------- Functions: ANSI C implementations --------------------*/
 
 /*---------------------------------------------------------------------------
    Function :   torben()
@@ -79,6 +80,7 @@ pixelvalue torben(pixelvalue m[], int n)
     else return mingtguess;
 }
 
+/* This covers the last two functions below (QuickSelect and Wirth) */
 #ifndef PIX_SWAP
 #define PIX_SWAP(a,b) { register pixelvalue temp=(a);(a)=(b);(b)=temp; }
 
@@ -155,14 +157,13 @@ pixelvalue quick_select(pixelvalue a[], int n)
    Job      :   find the kth smallest element in the array
    Notice   :   use the median_WIRTH() macro to get the median. 
 
-                Reference:
+           Reference:
 
-                  Author: Wirth, Niklaus 
-                   Title: Algorithms + data structures = programs 
-               Publisher: Englewood Cliffs: Prentice-Hall, 1976 
-    Physical description: 366 p. 
-                  Series: Prentice-Hall Series in Automatic Computation 
-
+              Author: Wirth, Niklaus 
+               Title: Algorithms + data structures = programs 
+           Publisher: Englewood Cliffs: Prentice-Hall, 1976
+	   Original code by Nicolas Devillard - 1998. Public domain.
+	   Modified by Stephen Arnold - 2005
  ---------------------------------------------------------------------------*/
 
 pixelvalue kth_smallest(pixelvalue a[], int n, int k)
@@ -191,5 +192,4 @@ pixelvalue kth_smallest(pixelvalue a[], int n, int k)
 
 #undef PIX_SWAP
 #endif
-
 

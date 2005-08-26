@@ -7,7 +7,7 @@
 
 DEBUGFLAGS	= -g -O0
 
-MYCFLAGS	=  -O2 -Wall -Wunreachable-code -Wfloat-equal
+MYCFLAGS	=  -Wall
 
 CC		= gcc -std=gnu99
 

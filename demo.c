@@ -1,7 +1,7 @@
-
 /*----------------------------------------------------------------------------
    Comparison of qsort-based and optimized median search methods
    Nicolas Devillard <ndevilla@free.fr> August 1998
+   Modified by Stephen Arnold, 2005
    This code in public domain.
  ---------------------------------------------------------------------------*/
 static const char rcsid[] =
@@ -12,6 +12,10 @@ static const char rcsid[] =
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
+#include <string.h>
+#include <math.h>
+#include <float.h>
 
 /*
  * A note about this benchmarking method:
@@ -20,17 +24,14 @@ static const char rcsid[] =
  * is reasonable to assume a constant machine load throughout the test.
  */
 
-#include <time.h>
-#include <string.h>
-#include <stdio.h>
-#include <math.h>
-#include <float.h>
-
 /* Number of pixels in the array */
 #define BIG_NUM (1024*1024)
 
-/* Generated numbers are in [0...MAX_ARRAY_VALUE-1] */
+/* Generated values are in [0...MAX_ARRAY_VALUE-1] */
 #define MAX_ARRAY_VALUE     1024    
+
+/* Number of search methods tested */
+#define N_METHODS   5
 
 /* Macro to determine an integer's oddity */
 #define odd(x) ((x)&1)
@@ -38,63 +39,12 @@ static const char rcsid[] =
 /* Macro to get Wirth median using kth_smallest function */
 #define median_WIRTH(a,n) kth_smallest(a,n,(((n)&1)?((n)/2):(((n)/2)-1)))
 
-/*------------------- Functions: ANSI C prototypes -------------------------*/
-
-int compare(const void *, const void*) ;
-
-void pixel_qsort(pixelvalue *, int) ;
-
-pixelvalue median_AHU(pixelvalue *, int) ;
-pixelvalue select_k(int, pixelvalue *, int);
-
+/* Additional required function prototypes */
 void bench(int, size_t);
-
-
-/*-------------------------- main() ----------------------------------------*/
-
-int main(int argc, char * argv[]) 
-{
-    int     i ;
-    int     from, to, step ;
-    int     count ;
-
-    if (argc<2) {
-        printf("usage:\n") ;
-        printf("%s <n>\n", argv[0]) ;
-        printf("\tif n=1 the output is verbose for one attempt\n") ;
-        printf("\tif n>1 the output reads:\n") ;
-        printf("\t# of elements | method1 | method2 | ...\n") ;
-        printf("\n") ;
-        printf("%s <from> <to> <step>\n", argv[0]) ;
-        printf("\twill loop over the number of elements in input\n") ;
-        printf("\n") ;
-        return 0 ;
-    }
-
-    if (argc==2) {
-        count = atoi(argv[1]) ;
-        if (count==1) {
-            bench(1, BIG_NUM) ;
-        } else {
-	    printf("Size\tQS\tWirth\tAHU\tTorben\tpixel\n") ;
-            for (i=0 ; i<atoi(argv[1]) ; i++) {
-                bench(0, BIG_NUM) ;
-            }
-        }
-    } else if (argc==4) {
-        from = atoi(argv[1]) ;
-        to   = atoi(argv[2]) ;
-        step = atoi(argv[3]) ;
-        for (count=from ; count<=to ; count+=step) {
-            bench(0, count) ;
-        }
-    }
-
-    return 0 ;
-}
-
-
-#define N_METHODS   5
+int compare(const void *, const void*);
+void pixel_qsort(pixelvalue *, int);
+pixelvalue median_AHU(pixelvalue *, int);
+pixelvalue select_k(int, pixelvalue *, int);
 
 void bench(int verbose, size_t array_size)
 {
@@ -180,7 +130,7 @@ void bench(int verbose, size_t array_size)
     }
     mednum++ ;
 
-    /* benchmark the AHU sort */
+    /* benchmark AHU sort */
     memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
     if (verbose) {
         printf("AHU median      :\t") ;
@@ -269,8 +219,6 @@ int compare(const void *f1, const void *f2)
 { return ( *(pixelvalue*)f1 > *(pixelvalue*)f2) ? 1 : -1 ; } 
 
 
-
-
 /*----------------------------------------------------------------------------
    Function :   pixel_qsort()
    In       :   pixel array, size of the array
@@ -278,7 +226,6 @@ int compare(const void *f1, const void *f2)
    Job      :   sort out the array of pixels
    Notice   :   optimized implementation, unreadable.
  ---------------------------------------------------------------------------*/
-
 
 #define PIX_SWAP(a,b) { pixelvalue temp=(a);(a)=(b);(b)=temp; }
 #define PIX_STACK_SIZE 50
@@ -356,7 +303,6 @@ void pixel_qsort(pixelvalue *pix_arr, int npix)
 #undef PIX_SWAP
 
 
-
 /*---------------------------------------------------------------------------
    Function :   select_k()
    In       :   list of pixelvalues, # of values, kth smallest element
@@ -365,7 +311,6 @@ void pixel_qsort(pixelvalue *pix_arr, int npix)
    Job      :   find out the kth smallest value of the list 
    Notice   :   recursively called by median_AHU()
  ---------------------------------------------------------------------------*/
-
 
 pixelvalue select_k(int k, pixelvalue * list, int n)
 {
@@ -381,7 +326,7 @@ pixelvalue select_k(int k, pixelvalue * list, int n)
     for (i=0 ; i<n ; i++) {
         if (list[i]<p) {
             n1++ ;
-        } else if (list[i]==p) {
+        } else if (fabs(list[i] - p) < 10 * FLT_EPSILON) {
             n2++ ;
         } else {
             n3++ ;
@@ -418,4 +363,48 @@ pixelvalue median_AHU(pixelvalue * list, int n)
         return select_k((n/2), list, n) ;
     }
 }
+
+/*********** Program Demo main **************/
+
+int main(int argc, char * argv[]) 
+{
+    int     i ;
+    int     from, to, step ;
+    int     count ;
+
+    if (argc<2) {
+        printf("usage:\n") ;
+        printf("%s <n>\n", argv[0]) ;
+        printf("\tif n=1 the output is verbose for one attempt\n") ;
+        printf("\tif n>1 the output reads:\n") ;
+        printf("\t# of elements | method1 | method2 | ...\n") ;
+        printf("\n") ;
+        printf("%s <from> <to> <step>\n", argv[0]) ;
+        printf("\twill loop over the number of elements in input\n") ;
+        printf("\n") ;
+        return 0 ;
+    }
+
+    if (argc==2) {
+        count = atoi(argv[1]) ;
+        if (count==1) {
+            bench(1, BIG_NUM) ;
+        } else {
+	    printf("Size\tQS\tWirth\tAHU\tTorben\tpixel sort\n") ;
+            for (i=0 ; i<atoi(argv[1]) ; i++) {
+                bench(0, BIG_NUM) ;
+            }
+        }
+    } else if (argc==4) {
+        from = atoi(argv[1]) ;
+        to   = atoi(argv[2]) ;
+        step = atoi(argv[3]) ;
+        for (count=from ; count<=to ; count+=step) {
+            bench(0, count) ;
+        }
+	return 0 ;
+    }
+
+}
+
 
