@@ -3,15 +3,20 @@
  * CSCI:  utility
  * CSC:  filters
  *
- * Stephen Arnold     $Date$
+ * Stephen Arnold <stephen.arnold@acm.org>
+ * $Date$
  *
- * These are the optimized C routines for a 1-dimensional median
+ * These are speed-optimized C routines for a 1-dimensional median
  * search.  QuickSelect and Wirth are the fastest for nominal size
  * input data, but require a copy of the array in memory.  Torben
  * is much slower in general, but operates on a read-only data set
- * of arbitrary size.
+ * of arbitrary size.  There are other more optimized routines for
+ * hard real-time applications.
  *
  * $Log$
+ * Revision 1.3  2005/08/27 00:29:34  sarnold
+ * header and comment cleanup
+ *
  * Revision 1.2  2005/08/26 21:29:54  sarnold
  * minor fixes and cleanup
  *
@@ -42,7 +47,7 @@ static const char rcsid[] =
 
 	The following code is public domain.
 	Algorithm by Torben Mogensen, original implementation by N. Devillard.
-	Modified by Stephen Arnold - 2005
+	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
  ---------------------------------------------------------------------------*/
 
 pixelvalue torben(pixelvalue m[], int n)
@@ -97,7 +102,7 @@ pixelvalue torben(pixelvalue m[], int n)
 	"Numerical recipes in C", Second Edition, Cambridge University 
 	Press, 1992, Section 8.5, ISBN 0-521-43108-5
 	Original code by Nicolas Devillard - 1998. Public domain.
-	Modified by Stephen Arnold - 2005
+	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
  ---------------------------------------------------------------------------*/
 
 pixelvalue quick_select(pixelvalue a[], int n) 
@@ -163,7 +168,7 @@ pixelvalue quick_select(pixelvalue a[], int n)
                Title: Algorithms + data structures = programs 
            Publisher: Englewood Cliffs: Prentice-Hall, 1976
 	   Original code by Nicolas Devillard - 1998. Public domain.
-	   Modified by Stephen Arnold - 2005
+	   Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
  ---------------------------------------------------------------------------*/
 
 pixelvalue kth_smallest(pixelvalue a[], int n, int k)

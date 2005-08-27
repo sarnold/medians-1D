@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------
    Comparison of qsort-based and optimized median search methods
    Nicolas Devillard <ndevilla@free.fr> August 1998
-   Modified by Stephen Arnold, 2005
+   Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
    This code in public domain.
  ---------------------------------------------------------------------------*/
 static const char rcsid[] =

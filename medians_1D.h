@@ -3,7 +3,8 @@
  * CSCI:  utility
  * CSC:  filters
  *
- * Stephen Arnold     $Date$
+ * Stephen Arnold <stephen.arnold@acm.org> 
+ * $Date$
  *
  * These are the optimized C routines for a 1-dimensional median
  * search.  QuickSelect and Wirth are the fastest for nominal size
@@ -12,8 +13,11 @@
  * of arbitrary size.
  *
  * $Log$
- * Revision 1.1  2005/08/26 20:18:07  sarnold
- * Initial revision
+ * Revision 1.2  2005/08/27 00:29:34  sarnold
+ * header and comment cleanup
+ *
+ * Revision 1.1.1.1  2005/08/26 20:18:07  sarnold
+ * initial 1-D median filter demo
  *
  *
  *
