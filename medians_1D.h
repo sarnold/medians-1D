@@ -13,6 +13,9 @@
  * of arbitrary size.
  *
  * $Log$
+ * Revision 1.3  2005/08/28 07:03:53  sarnold
+ * more fine-tuning
+ *
  * Revision 1.2  2005/08/27 00:29:34  sarnold
  * header and comment cleanup
  *
@@ -23,6 +26,9 @@
  *
  *
  *******************************************************************/
+
+#ifndef _MEDIANS_1D_H_
+#define _MEDIANS_1D_H_
 
 /* Data modified by the QuickSelect and Wirth routines;
    change the type as required. */
@@ -43,4 +49,4 @@ pixelvalue kth_smallest(pixelvalue *, int, int);
 
 #define median_WIRTH(a,n) kth_smallest(a,n,(((n)&1)?((n)/2):(((n)/2)-1)))
 
-
+#endif

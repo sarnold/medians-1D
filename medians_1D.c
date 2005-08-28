@@ -14,6 +14,9 @@
  * hard real-time applications.
  *
  * $Log$
+ * Revision 1.4  2005/08/28 07:03:53  sarnold
+ * more fine-tuning
+ *
  * Revision 1.3  2005/08/27 00:29:34  sarnold
  * header and comment cleanup
  *
@@ -36,58 +39,11 @@ static const char rcsid[] =
 #include <stdlib.h>
 #include <unistd.h>
 
-/*---------------------------------------------------------------------------
-   Function :   torben()
-   In       :   array of elements, # of elements in the array, rank k
-   Out      :   one element
-   Job      :   find the median element in a read-only array of arbitary
-		size.
-
-	Reference:
-
-	The following code is public domain.
-	Algorithm by Torben Mogensen, original implementation by N. Devillard.
-	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
- ---------------------------------------------------------------------------*/
-
-pixelvalue torben(pixelvalue m[], int n)
-{
-    int         i, less, greater, equal, half;
-    pixelvalue  min, max, guess, maxltguess, mingtguess;
-
-    half = (n+1)/2 ;
-    min = max = m[0] ;
-    for (i=1 ; i<n ; i++) {
-        if (m[i]<min) min=m[i];
-        if (m[i]>max) max=m[i];
-    }
-
-    while (1) {
-        guess = (min+max)/2;
-        less = 0; greater = 0; equal = 0;
-        maxltguess = min ;
-        mingtguess = max ;
-        for (i=0; i<n; i++) {
-            if (m[i]<guess) {
-                less++;
-                if (m[i]>maxltguess) maxltguess = m[i] ;
-            } else if (m[i]>guess) {
-                greater++;
-                if (m[i]<mingtguess) mingtguess = m[i] ;
-            } else equal++;
-        }
-        if (less <= half && greater <= half) break ;
-        else if (less>greater) max = maxltguess ;
-        else min = mingtguess; 
-    }
-    if (less >= half) return maxltguess;
-    else if (less+equal >= half) return guess;
-    else return mingtguess;
-}
-
-/* This covers the last two functions below (QuickSelect and Wirth) */
+/* This covers the first two functions below (QuickSelect and Wirth). */
+/* The Wirth macro is defined in the header file medians_1D.h and the */
+/* demo code. */
 #ifndef PIX_SWAP
-#define PIX_SWAP(a,b) { register pixelvalue temp=(a);(a)=(b);(b)=temp; }
+#define PIX_SWAP(a,b) { register pixelvalue t=(a);(a)=(b);(b)=t; }
 
 /*---------------------------------------------------------------------------
    Function :   quick_select()
@@ -105,8 +61,11 @@ pixelvalue torben(pixelvalue m[], int n)
 	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
  ---------------------------------------------------------------------------*/
 
-pixelvalue quick_select(pixelvalue a[], int n) 
-{
+pixelvalue
+#ifdef __GNUC__
+__attribute__((__no_instrument_function__))
+#endif
+quick_select(pixelvalue a[], int n) {
     int low, high ;
     int median;
     int middle, ll, hh;
@@ -171,8 +130,11 @@ pixelvalue quick_select(pixelvalue a[], int n)
 	   Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
  ---------------------------------------------------------------------------*/
 
-pixelvalue kth_smallest(pixelvalue a[], int n, int k)
-{
+pixelvalue
+#ifdef __GNUC__
+__attribute__((__no_instrument_function__))
+#endif
+kth_smallest(pixelvalue a[], int n, int k) {
     register int i,j,l,m ;
     register pixelvalue x ;
 
@@ -197,4 +159,56 @@ pixelvalue kth_smallest(pixelvalue a[], int n, int k)
 
 #undef PIX_SWAP
 #endif
+
+/*---------------------------------------------------------------------------
+   Function :   torben()
+   In       :   array of elements, # of elements in the array, rank k
+   Out      :   one element
+   Job      :   find the median element in a read-only array of arbitary
+		size.
+
+	Reference:
+
+	The following code is public domain.
+	Algorithm by Torben Mogensen, original implementation by N. Devillard.
+	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
+ ---------------------------------------------------------------------------*/
+
+pixelvalue
+#ifdef __GNUC__
+__attribute__((__no_instrument_function__))
+#endif
+torben(pixelvalue m[], int n) {
+    int         i, less, greater, equal, half;
+    pixelvalue  min, max, guess, maxltguess, mingtguess;
+
+    half = (n+1)/2 ;
+    min = max = m[0] ;
+    for (i=1 ; i<n ; i++) {
+        if (m[i]<min) min=m[i];
+        if (m[i]>max) max=m[i];
+    }
+
+    while (1) {
+        guess = (min+max)/2;
+        less = 0; greater = 0; equal = 0;
+        maxltguess = min ;
+        mingtguess = max ;
+        for (i=0; i<n; i++) {
+            if (m[i]<guess) {
+                less++;
+                if (m[i]>maxltguess) maxltguess = m[i] ;
+            } else if (m[i]>guess) {
+                greater++;
+                if (m[i]<mingtguess) mingtguess = m[i] ;
+            } else equal++;
+        }
+        if (less <= half && greater <= half) break ;
+        else if (less>greater) max = maxltguess ;
+        else min = mingtguess; 
+    }
+    if (less >= half) return maxltguess;
+    else if (less+equal >= half) return guess;
+    else return mingtguess;
+}
 

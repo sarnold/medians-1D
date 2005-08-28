@@ -7,11 +7,11 @@
 
 DEBUGFLAGS	= -g -O0
 
-MYCFLAGS	=  -Wall
+MYCFLAGS	=  -Wall -O2
 
 CC		= gcc -std=gnu99
 
-CFLAGS		= $(DEBUGFLAGS) $(MYCFLAGS)
+CFLAGS		= $(MYCFLAGS) #$(DEBUGFLAGS)
 
 LINT		= $(CC) $(LINTFLAGS)
 LINTFLAGS	= -fsyntax-only -Wall -Wno-unused -Wunreachable-code
