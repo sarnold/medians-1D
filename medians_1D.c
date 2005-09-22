@@ -14,6 +14,9 @@
  * hard real-time applications.
  *
  * $Log$
+ * Revision 1.5  2005/09/22 02:14:02  sarnold
+ * added swig info and updated make file
+ *
  * Revision 1.4  2005/08/28 07:03:53  sarnold
  * more fine-tuning
  *
@@ -25,8 +28,6 @@
  *
  * Revision 1.1.1.1  2005/08/26 20:18:07  sarnold
  * initial 1-D median filter demo
- *
- *
  *
  *
  *******************************************************************/
@@ -47,7 +48,7 @@ static const char rcsid[] =
 
 /*---------------------------------------------------------------------------
    Function :   quick_select()
-   In       :   array of elements, # of elements in the array, rank k
+   In       :   array of elements, # of elements in the array
    Out      :   one element
    Job      :   find the median element in the array (chooses the lower
    		median for an even number of elements).
@@ -162,7 +163,7 @@ kth_smallest(pixelvalue a[], int n, int k) {
 
 /*---------------------------------------------------------------------------
    Function :   torben()
-   In       :   array of elements, # of elements in the array, rank k
+   In       :   array of elements, # of elements in the array
    Out      :   one element
    Job      :   find the median element in a read-only array of arbitary
 		size.

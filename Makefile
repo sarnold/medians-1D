@@ -13,8 +13,14 @@ CC		= gcc -std=gnu99
 
 CFLAGS		= $(MYCFLAGS) #$(DEBUGFLAGS)
 
+SWFLAGS	= -I/usr/include/python2.3
+
 LINT		= $(CC) $(LINTFLAGS)
 LINTFLAGS	= -fsyntax-only -Wall -Wno-unused -Wunreachable-code
+
+MKLIB		= $(CC) -fpic -c medians_1D.c
+
+MKSWIGPY		= swig -python medians_1D.i
 
 DEST		= $HOME/bin
 
@@ -40,16 +46,24 @@ MAKEFILE	= Makefile
 OBJS		= medians_1D.o \
 		demo.o
 
+SWOBJS		= medians_1D.o \
+		medians_1D_wrap.o
+
 TEST_OBJS	=
 
 PRINT		= pr
 
-PROGRAM		= demo
+PROGRAM	= demo
 
+SHARED		= libmedians_1D.so
+
+SWIGLIB		= medians_1Dmodule.so
 
 SRCS		= medians_1D.c \
 		demo.c
 
+SWSRCS	= medians_1D.c \
+		medians_1D_wrap.c
 
 .c.o:
 		$(CC) -c $(CFLAGS) $<
@@ -61,9 +75,20 @@ $(PROGRAM):     $(OBJS) $(LOADLIBES)
 		$(LD) $(LDFLAGS) $(OBJS) $(LOADLIBES) $(LDLIBS) -o $(PROGRAM)
 		@echo "done"
 
-clean:;		@rm -f $(OBJS) core
+lib:;			@$(MKLIB)
+			@echo "Making shared lib $(SHARED) ..."
+			$(LD) -shared medians_1D.o -o $(SHARED)
+			@echo "done"
 
-clobber:;	@rm -f $(OBJS) $(PROGRAM) core tags
+swig:;		@$(MKSWIGPY)
+			@echo "Making shared lib $(SWIGLIB) ..."
+			$(CC) -c $(SWSRCS) $(SWFLAGS)
+			$(LD) -shared $(SWOBJS) -o $(SWIGLIB)
+			@echo "done"
+
+clean:;		@rm -f $(OBJS) $(SWOBJS) core
+
+clobber:;	@rm -f $(OBJS) $(SWOBJS) $(PROGRAM) $(SHARED) $(SWIGLIB) core tags
 
 depend:;	@makedepend -Y $(CFLAGS) $(HDRS) $(SRCS)
 
