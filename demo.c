@@ -1,9 +1,20 @@
-/*----------------------------------------------------------------------------
-   Comparison of qsort-based and optimized median search methods
-   Nicolas Devillard <ndevilla@free.fr> August 1998
-   Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
+/*! \file demo.c
+   \brief A benchmark demo driver for medians_1D and a couple of other methods.
+
+   Comparison of qsort-based and optimized median search methods for a
+   1-D data array.  The data type is flexible.
+
+   Original code by Nicolas Devillard <ndevilla@free.fr> August 1998.
+   Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005.
    This code in public domain.
- ---------------------------------------------------------------------------*/
+
+   A note about this benchmarking method:
+ 
+   The reported times indicate the actual time spent on CPU, they are
+   quite dependent on CPU load. However, the test is quite fast and it
+   is reasonable to assume a constant machine load throughout the test.
+*/
+
 static const char rcsid[] =
     "$Id";
 
@@ -17,29 +28,22 @@ static const char rcsid[] =
 #include <math.h>
 #include <float.h>
 
-/*
- * A note about this benchmarking method:
- * the reported times indicate the actual time spent on CPU, they are
- * quite dependent on CPU load. However, the test is quite fast and it
- * is reasonable to assume a constant machine load throughout the test.
- */
-
-/* Number of pixels in the array */
+//! Number of elements in the target array
 #define BIG_NUM (1024*1024)
 
-/* Generated values are in [0...MAX_ARRAY_VALUE-1] */
+//! Random test data; generated values are in [0...MAX_ARRAY_VALUE-1]
 #define MAX_ARRAY_VALUE     1024    
 
-/* Number of search methods tested */
+//! Number of search methods tested
 #define N_METHODS   5
 
-/* Macro to determine an integer's oddity */
+//! Macro to determine an integer's oddness
 #define odd(x) ((x)&1)
 
-/* Macro to get Wirth median using kth_smallest function */
+//! Macro to get Wirth median using kth_smallest function
 #define median_WIRTH(a,n) kth_smallest(a,n,(((n)&1)?((n)/2):(((n)/2)-1)))
 
-/* Additional required function prototypes */
+// Additional required function prototypes
 void bench(int, size_t);
 int compare(const void *, const void*);
 void pixel_qsort(pixelvalue *, int);
@@ -58,11 +62,11 @@ void bench(int verbose, size_t array_size)
     pixelvalue  *   array_init,
                 *   array ;
 
-    /*
-     * Initialize random generator with PID
-     * This is the only Unix-ish thing; can be replaced with an
-     * alternate scheme.
-     */
+    //! Random number seed
+    /*! Initialize random generator with PID.
+        This is the only Unix-ish thing; can be replaced with an
+        alternate scheme.
+    */
     srand48(getpid()) ;
 
     if (verbose) {
@@ -90,7 +94,7 @@ void bench(int verbose, size_t array_size)
     }
     mednum = 0 ;
 
-    /* benchmark the quick select sort */
+    //! benchmark the quickselect sort
     memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
     if (verbose) {
         printf("quick select    :\t") ;
@@ -110,7 +114,7 @@ void bench(int verbose, size_t array_size)
     }
     mednum++ ;
 
-    /* benchmark WIRTH */
+    //! benchmark WIRTH
     memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
     if (verbose) {
         printf("WIRTH median    :\t") ;
@@ -130,7 +134,7 @@ void bench(int verbose, size_t array_size)
     }
     mednum++ ;
 
-    /* benchmark AHU sort */
+    //! benchmark AHU sort
     memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
     if (verbose) {
         printf("AHU median      :\t") ;
@@ -150,7 +154,7 @@ void bench(int verbose, size_t array_size)
     }
     mednum++ ;
 
-    /* benchmark torben's method */
+    //! benchmark torben's method
     memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
     if (verbose) {
         printf("torben          :\t") ;
@@ -170,7 +174,7 @@ void bench(int verbose, size_t array_size)
     }
     mednum++ ;
 
-    /* benchmark the eclipse fast pixel sort */
+    //! benchmark the eclipse fast pixel sort
     memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
     if (verbose) {
         printf("fast pixel sort :\t") ;
@@ -211,21 +215,20 @@ void bench(int verbose, size_t array_size)
     return ;
 }
 
-/*
- * This function only useful to the qsort() routine
- */
-
+//! This function is only useful to the qsort() routine
 int compare(const void *f1, const void *f2)
 { return ( *(pixelvalue*)f1 > *(pixelvalue*)f2) ? 1 : -1 ; } 
 
 
-/*----------------------------------------------------------------------------
-   Function :   pixel_qsort()
-   In       :   pixel array, size of the array
-   Out      :   void
-   Job      :   sort out the array of pixels
-   Notice   :   optimized implementation, unreadable.
- ---------------------------------------------------------------------------*/
+/*! \fn void pixel_qsort(pixelvalue *, int)
+   \brief Old and supposedly optimized quicksort algorithm
+
+   Function  :   pixel_qsort()
+    - In     :   pixel array, size of the array
+    - Out    :   void
+    - Job    :   sort out the array of pixels
+    - Note   :   optimized implementation, unreadable.
+*/
 
 #define PIX_SWAP(a,b) { pixelvalue temp=(a);(a)=(b);(b)=temp; }
 #define PIX_STACK_SIZE 50
@@ -303,15 +306,15 @@ void pixel_qsort(pixelvalue *pix_arr, int npix)
 #undef PIX_SWAP
 
 
-/*---------------------------------------------------------------------------
-   Function :   select_k()
-   In       :   list of pixelvalues, # of values, kth smallest element
-                which value is searched for (median for k=n/2)
-   Out      :   pixelvalue
-   Job      :   find out the kth smallest value of the list 
-   Notice   :   recursively called by median_AHU()
- ---------------------------------------------------------------------------*/
+/*! \fn pixelvalue select_k(int, pixelvalue *, int)
+   \brief Called by median_AHU()
 
+   Function :   select_k()
+    - In    :   element to search for, list of pixelvalues, # of values
+    - Out   :   pixelvalue
+    - Job   :   find out the kth smallest value of the list 
+    - Note  :   recursively called by median_AHU()
+*/
 pixelvalue select_k(int k, pixelvalue * list, int n)
 {
     int             n1 = 0,
@@ -355,6 +358,7 @@ pixelvalue select_k(int k, pixelvalue * list, int n)
 }
 
 
+//! This function uses select_k to find the median
 pixelvalue median_AHU(pixelvalue * list, int n)
 {
     if (odd(n)) {
@@ -364,8 +368,8 @@ pixelvalue median_AHU(pixelvalue * list, int n)
     }
 }
 
-/*********** Program Demo main **************/
 
+//! Main driver demo for median search routines
 int main(int argc, char * argv[]) 
 {
     int     i ;

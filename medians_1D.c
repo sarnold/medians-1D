@@ -1,10 +1,5 @@
-/********************************************************************
+/***********************************************************************
  * $RCSfile$
- * CSCI:  utility
- * CSC:  filters
- *
- * Stephen Arnold <stephen.arnold@acm.org>
- * $Date$
  *
  * These are speed-optimized C routines for a 1-dimensional median
  * search.  QuickSelect and Wirth are the fastest for nominal size
@@ -14,6 +9,9 @@
  * hard real-time applications.
  *
  * $Log$
+ * Revision 1.6  2005/09/23 05:50:54  sarnold
+ * updated to doxygen-style comments
+ *
  * Revision 1.5  2005/09/22 02:14:02  sarnold
  * added swig info and updated make file
  *
@@ -29,8 +27,11 @@
  * Revision 1.1.1.1  2005/08/26 20:18:07  sarnold
  * initial 1-D median filter demo
  *
+ * Stephen Arnold <stephen.arnold@acm.org>
+ * $Date$
  *
- *******************************************************************/
+ **********************************************************************/
+
 static const char rcsid[] =
     "$Id";
 
@@ -40,27 +41,19 @@ static const char rcsid[] =
 #include <stdlib.h>
 #include <unistd.h>
 
-/* This covers the first two functions below (QuickSelect and Wirth). */
-/* The Wirth macro is defined in the header file medians_1D.h and the */
-/* demo code. */
+//! Pixel-swapping macro
+/*! Macro left-over from initial implementation.  Need to change to
+    a real function and let the compiler do the work
+*/
 #ifndef PIX_SWAP
 #define PIX_SWAP(a,b) { register pixelvalue t=(a);(a)=(b);(b)=t; }
 
-/*---------------------------------------------------------------------------
+//! Function implementing quickselect algorithm
+/*!
    Function :   quick_select()
-   In       :   array of elements, # of elements in the array
-   Out      :   one element
-   Job      :   find the median element in the array (chooses the lower
-   		median for an even number of elements).
-
-	Reference:
-
-	This Quickselect routine is based on the algorithm described in
-	"Numerical recipes in C", Second Edition, Cambridge University 
-	Press, 1992, Section 8.5, ISBN 0-521-43108-5
-	Original code by Nicolas Devillard - 1998. Public domain.
-	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
- ---------------------------------------------------------------------------*/
+    - In    :   array of elements, # of elements in the array
+    - Out   :   one element
+*/
 
 pixelvalue
 #ifdef __GNUC__
@@ -115,21 +108,12 @@ quick_select(pixelvalue a[], int n) {
     }
 }   
 
-/*---------------------------------------------------------------------------
+//! Function implementing kth_smallest() for Wirth macro
+/*!
    Function :   kth_smallest()
-   In       :   array of elements, # of elements in the array, rank k
-   Out      :   one element
-   Job      :   find the kth smallest element in the array
-   Notice   :   use the median_WIRTH() macro to get the median. 
-
-           Reference:
-
-              Author: Wirth, Niklaus 
-               Title: Algorithms + data structures = programs 
-           Publisher: Englewood Cliffs: Prentice-Hall, 1976
-	   Original code by Nicolas Devillard - 1998. Public domain.
-	   Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
- ---------------------------------------------------------------------------*/
+    - In    :   array of elements, # of elements in the array, rank k
+    - Out   :   one element
+*/
 
 pixelvalue
 #ifdef __GNUC__
@@ -161,19 +145,12 @@ kth_smallest(pixelvalue a[], int n, int k) {
 #undef PIX_SWAP
 #endif
 
-/*---------------------------------------------------------------------------
+//! Function implementing Torben's algorithm
+/*!
    Function :   torben()
-   In       :   array of elements, # of elements in the array
-   Out      :   one element
-   Job      :   find the median element in a read-only array of arbitary
-		size.
-
-	Reference:
-
-	The following code is public domain.
-	Algorithm by Torben Mogensen, original implementation by N. Devillard.
-	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005
- ---------------------------------------------------------------------------*/
+    - In    :   array of elements, # of elements in the array
+    - Out   :   one element
+*/
 
 pixelvalue
 #ifdef __GNUC__
