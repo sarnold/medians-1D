@@ -18,9 +18,9 @@ SWFLAGS	= -I/usr/include/python2.3
 LINT		= $(CC) $(LINTFLAGS)
 LINTFLAGS	= -fsyntax-only -Wall -Wno-unused -Wunreachable-code
 
-MKLIB		= $(CC) -fpic -c medians_1D.c
+MKLIB		= $(CC) -fPIC -c medians_1D.c
 
-MKSWIGPY		= swig -python medians_1D.i
+MKSWIGPY		= swig -shadow -python medians_1D.i
 
 DEST		= $HOME/bin
 
@@ -57,7 +57,7 @@ PROGRAM	= demo
 
 SHARED		= libmedians_1D.so
 
-SWIGLIB		= medians_1Dmodule.so
+SWIGLIB		= _medians_1Dmodule.so
 
 SRCS		= medians_1D.c \
 		demo.c
@@ -82,7 +82,7 @@ lib:;			@$(MKLIB)
 
 swig:;		@$(MKSWIGPY)
 			@echo "Making shared lib $(SWIGLIB) ..."
-			$(CC) -c $(SWSRCS) $(SWFLAGS)
+			$(CC) -fPIC -c $(SWSRCS) $(SWFLAGS)
 			$(LD) -shared $(SWOBJS) -o $(SWIGLIB)
 			@echo "done"
 
