@@ -40,9 +40,6 @@ static const char rcsid[] =
 //! Macro to determine an integer's oddness
 #define odd(x) ((x)&1)
 
-//! Macro to get Wirth median using kth_smallest function
-#define median_WIRTH(a,n) kth_smallest(a,n,(((n)&1)?((n)/2):(((n)/2)-1)))
-
 // Additional required function prototypes
 void bench(int, size_t);
 int compare(const void *, const void*);
@@ -114,14 +111,14 @@ void bench(int verbose, size_t array_size)
     }
     mednum++ ;
 
-    //! benchmark WIRTH
+    //! benchmark wirth function
     memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
     if (verbose) {
-        printf("WIRTH median    :\t") ;
+        printf("Wirth median    :\t") ;
         fflush(stdout) ;
     }
     chrono = clock() ;
-    med[mednum] = median_WIRTH(array, array_size) ;
+    med[mednum] = wirth(array, array_size) ;
     elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC ;
     if (verbose) {
         printf("%5.3f sec\t", elapsed) ;

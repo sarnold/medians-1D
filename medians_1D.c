@@ -9,6 +9,9 @@
  * hard real-time applications.
  *
  * $Log$
+ * Revision 1.7  2005/09/26 02:57:49  sarnold
+ * changed macros to functions (makes swig happy)
+ *
  * Revision 1.6  2005/09/23 05:50:54  sarnold
  * updated to doxygen-style comments
  *
@@ -45,8 +48,13 @@ static const char rcsid[] =
 /*! Macro left-over from initial implementation.  Need to change to
     a real function and let the compiler do the work
 */
-#ifndef PIX_SWAP
-#define PIX_SWAP(a,b) { register pixelvalue t=(a);(a)=(b);(b)=t; }
+
+//! Function implementing basic pixel swapping algorithm
+void swap(pixelvalue *a, pixelvalue *b) {
+    register pixelvalue t;
+    t=*a; *a=*b; *b=t;
+    return;
+}
 
 //! Function implementing quickselect algorithm
 /*!
@@ -71,18 +79,18 @@ quick_select(pixelvalue a[], int n) {
 
         if (high == low + 1) {  /* Two elements only */
             if (a[low] > a[high])
-                PIX_SWAP(a[low], a[high]) ;
+                swap(&a[low], &a[high]) ;
             return a[median] ;
         }
 
     /* Find median of low, middle and high items; swap into position low */
         middle = (low + high) / 2;
-        if (a[middle] > a[high])    PIX_SWAP(a[middle], a[high]) ;
-        if (a[low] > a[high])       PIX_SWAP(a[low], a[high]) ;
-        if (a[middle] > a[low])     PIX_SWAP(a[middle], a[low]) ;
+        if (a[middle] > a[high])    swap(&a[middle], &a[high]) ;
+        if (a[low] > a[high])       swap(&a[low], &a[high]) ;
+        if (a[middle] > a[low])     swap(&a[middle], &a[low]) ;
 
     /* Swap low item (now in position middle) into position (low+1) */
-        PIX_SWAP(a[middle], a[low+1]) ;
+        swap(&a[middle], &a[low+1]) ;
 
     /* Nibble from each end towards middle, swapping items when stuck */
         ll = low + 1;
@@ -94,11 +102,11 @@ quick_select(pixelvalue a[], int n) {
             if (hh < ll)
             break;
 
-            PIX_SWAP(a[ll], a[hh]) ;
+            swap(&a[ll], &a[hh]) ;
         }
         
         /* Swap middle item (in position low) back into correct position */
-        PIX_SWAP(a[low], a[hh]) ;
+        swap(&a[low], &a[hh]) ;
         
         /* Re-set active partition */
         if (hh <= median)
@@ -132,7 +140,7 @@ kth_smallest(pixelvalue a[], int n, int k) {
             while (a[i]<x) i++ ;
             while (x<a[j]) j-- ;
             if (i<=j) {
-                PIX_SWAP(a[i],a[j]) ;
+                swap(&a[i],&a[j]) ;
                 i++ ; j-- ;
             }
         } while (i<=j) ;
@@ -142,8 +150,19 @@ kth_smallest(pixelvalue a[], int n, int k) {
     return a[k] ;
 }
 
-#undef PIX_SWAP
+//! Function wrapper for kth_smallest to get Wirth's median
+/*!
+   Function :   wirth()
+    - In    :   array of elements, # of elements in the array
+    - Out   :   one element
+*/
+pixelvalue
+#ifdef __GNUC__
+__attribute__((__no_instrument_function__))
 #endif
+wirth(pixelvalue a[], int n) {
+    return kth_smallest(a,n,(((n)&1)?((n)/2):(((n)/2)-1)));
+}
 
 //! Function implementing Torben's algorithm
 /*!

@@ -1,24 +1,3 @@
-/***********************************************************************
- * $RCSfile$
- *
- * $Log$
- * Revision 1.4  2005/09/23 05:50:54  sarnold
- * updated to doxygen-style comments
- *
- * Revision 1.3  2005/08/28 07:03:53  sarnold
- * more fine-tuning
- *
- * Revision 1.2  2005/08/27 00:29:34  sarnold
- * header and comment cleanup
- *
- * Revision 1.1.1.1  2005/08/26 20:18:07  sarnold
- * initial 1-D median filter demo
- *
- * Stephen Arnold <stephen.arnold@acm.org> 
- * Last edit:  $Date$
- *
- ***********************************************************************/
-
 /*! \file medians_1D.h
    \brief Function prototypes for 1-D median search.
   
@@ -33,6 +12,11 @@
    the input data.
  */
  
+#ifndef _MEDIANS_1D_H_
+#define _MEDIANS_1D_H_
+
+/////////////////////////////////////////////////////////////////////////
+
 /*! \fn pixelvalue quick_select(pixelvalue a[], int n)
    \brief Quickselect algorithm from Numerical Recipes
 
@@ -61,7 +45,7 @@
     - In     :   array of elements, # of elements in the array, rank k
     - Out    :   one element
     - Job    :   find the kth smallest element in the array
-    - Note   :   use the median_WIRTH() macro to get the median
+    - Note   :   use the median_WIRTH() function to get the median
 
         Reference:
 
@@ -92,11 +76,20 @@
 
 /////////////////////////////////////////////////////////////////////////
 
-/*! \def median_WIRTH(a,n)
-    \brief A macro that returns the median from kth_smallest.
+/*! \fn pixelvalue wirth(pixelvalue a[], int n)
+    \brief A function that returns the median from kth_smallest.
    
-    Initial implementation of Wirth's algorithm uses this macro to wrap
-    the kth_smallest function.  Need to change to a function.
+    Initial implementation of Wirth's algorithm used a macro to wrap
+    the kth_smallest function.  Changed to a function.
+*/
+
+/////////////////////////////////////////////////////////////////////////
+
+/*! \fn void swap(pixelvalue *, pixelvalue *)
+    \brief A function that swaps the values of two array elements.
+   
+    Initial implementation of several algorithms used a macro to swap
+    pixel values.  Changed to a function.
 */
 
 /*! \var typedef pixelvalue
@@ -106,20 +99,43 @@
     filtering 8-bit gray-scale images would use "int".
 */
 
-#ifndef _MEDIANS_1D_H_
-#define _MEDIANS_1D_H_
-
 /* Data modified by the QuickSelect and Wirth routines;
    change the typedef below as required. */
 
 typedef float pixelvalue;
 
+void swap(pixelvalue *, pixelvalue *);
+
 pixelvalue quick_select(pixelvalue a[], int n);
 
 pixelvalue kth_smallest(pixelvalue *, int, int);
 
-#define median_WIRTH(a,n) kth_smallest(a,n,(((n)&1)?((n)/2):(((n)/2)-1)))
+pixelvalue wirth(pixelvalue a[], int n);
 
 pixelvalue torben(pixelvalue a[], int n);
 
 #endif
+
+/***********************************************************************
+ * $RCSfile$
+ *
+ * $Log$
+ * Revision 1.5  2005/09/26 02:57:49  sarnold
+ * changed macros to functions (makes swig happy)
+ *
+ * Revision 1.4  2005/09/23 05:50:54  sarnold
+ * updated to doxygen-style comments
+ *
+ * Revision 1.3  2005/08/28 07:03:53  sarnold
+ * more fine-tuning
+ *
+ * Revision 1.2  2005/08/27 00:29:34  sarnold
+ * header and comment cleanup
+ *
+ * Revision 1.1.1.1  2005/08/26 20:18:07  sarnold
+ * initial 1-D median filter demo
+ *
+ * Stephen Arnold <stephen.arnold@acm.org> 
+ * Last edit:  $Date$
+ *
+ ***********************************************************************/
