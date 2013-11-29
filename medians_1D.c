@@ -30,7 +30,7 @@
  * Revision 1.1.1.1  2005/08/26 20:18:07  sarnold
  * initial 1-D median filter demo
  *
- * Stephen Arnold <stephen.arnold@acm.org>
+ * Stephen Arnold <stephen.arnold42 _at_ gmail.com>
  * $Date$
  *
  **********************************************************************/
