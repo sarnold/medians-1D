@@ -32,7 +32,8 @@
 	"Numerical recipes in C", Second Edition, Cambridge University
 	Press, 1992, Section 8.5, ISBN 0-521-43108-5.
 	Original code by Nicolas Devillard - 1998. Public domain.
-	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005.
+	Modified by Stephen Arnold <stephen.arnold42 _at_ gmail.com> 
+	Now licensed under LGPLv3.  See the LICENSE file for details.
 
  */
 
@@ -52,7 +53,8 @@
         Author: Wirth, Niklaus (1976) Algorithms + data structures = programs,
         Prentice-Hall, Englewood Cliffs, NJ.
 	Original code by Nicolas Devillard - 1998. Public domain.
-	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005.
+	Modified by Stephen Arnold <stephen.arnold42 _at_ gmail.com>
+	Now licensed under LGPLv3.  See the LICENSE file for details.
 
  */
 
@@ -70,7 +72,8 @@
 
 	This code is public domain.
 	Algorithm by Torben Mogensen, original code by N. Devillard.
-	Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005.
+	Modified by Stephen Arnold <stephen.arnold42 _at_ gmail.com>
+	Now licensed under LGPLv3.  See the LICENSE file for details.
 
  */
 
@@ -135,7 +138,7 @@ pixelvalue torben(pixelvalue a[], int n);
  * Revision 1.1.1.1  2005/08/26 20:18:07  sarnold
  * initial 1-D median filter demo
  *
- * Stephen Arnold <stephen.arnold@acm.org> 
+ * Stephen Arnold <stephen.arnold42 _at_ gmail.com> 
  * Last edit:  $Date$
  *
  ***********************************************************************/

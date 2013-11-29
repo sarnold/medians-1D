@@ -6,7 +6,8 @@
 
    Original code by Nicolas Devillard <ndevilla@free.fr> August 1998.
    Modified by Stephen Arnold <stephen.arnold@acm.org> August 2005.
-   This code in public domain.
+   This code is now licensed under the LGPLv3.  See the LICENSE file
+   for details.
 
    A note about this benchmarking method:
  

@@ -11,16 +11,16 @@ MYCFLAGS	=  -Wall -O2
 
 CC		= gcc -std=gnu99
 
-CFLAGS		= $(MYCFLAGS) #$(DEBUGFLAGS)
+CFLAGS		= $(MYCFLAGS)
 
-SWFLAGS	= -I/usr/include/python2.3
+SWFLAGS		= -I/usr/include/python2.3
 
 LINT		= $(CC) $(LINTFLAGS)
 LINTFLAGS	= -fsyntax-only -Wall -Wno-unused -Wunreachable-code
 
 MKLIB		= $(CC) -fPIC -c medians_1D.c
 
-MKSWIGPY		= swig -shadow -python medians_1D.i
+MKSWIGPY	= swig -shadow -python medians_1D.i
 
 DEST		= $HOME/bin
 
@@ -37,9 +37,6 @@ LDFLAGS		= -g
 LOADLIBES	=
 
 LDLIBS		= 
-
-# other system libs; I don't need them yet...
-# -lm -lz
 
 MAKEFILE	= Makefile
 
@@ -75,18 +72,18 @@ $(PROGRAM):     $(OBJS) $(LOADLIBES)
 		$(LD) $(LDFLAGS) $(OBJS) $(LOADLIBES) $(LDLIBS) -o $(PROGRAM)
 		@echo "done"
 
-lib:;			@$(MKLIB)
-			@echo "Making shared lib $(SHARED) ..."
-			$(LD) -shared medians_1D.o -o $(SHARED)
-			@echo "done"
+lib:;		@$(MKLIB)
+		@echo "Making shared lib $(SHARED) ..."
+		$(LD) -shared medians_1D.o -o $(SHARED)
+		@echo "done"
 
 swig:;		@$(MKSWIGPY)
-			@echo "Making shared lib $(SWIGLIB) ..."
-			$(CC) -fPIC -c $(SWSRCS) $(SWFLAGS)
-			$(LD) -shared $(SWOBJS) -o $(SWIGLIB)
-			@echo "done"
+		@echo "Making shared lib $(SWIGLIB) ..."
+		$(CC) -fPIC -c $(SWSRCS) $(SWFLAGS)
+		$(LD) -shared $(SWOBJS) -o $(SWIGLIB)
+		@echo "done"
 
-clean:;		@rm -f $(OBJS) $(SWOBJS) core
+clean:;		@rm -f $(OBJS) $(SWOBJS) core demo
 
 clobber:;	@rm -f $(OBJS) $(SWOBJS) $(PROGRAM) $(SHARED) $(SWIGLIB) core tags
 
