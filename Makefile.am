@@ -43,7 +43,9 @@ docs :	Doxyfile $(DOCS)/.keep_dir
 	@echo "API docs now in $(DOCS)/html"
 
 
-docsclean :
+clean-docs :
 	rm -rf $(DOCS)
 
-
+clean-local:
+	rm -rf Makefile.in aclocal.m4 ar-lib autom4te.cache/ compile \
+		config.h.in configure depcomp install-sh missing

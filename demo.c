@@ -10,7 +10,7 @@
    for details.
 
    A note about this benchmarking method:
- 
+
    The reported times indicate the actual time spent on CPU, they are
    quite dependent on CPU load. However, the test is quite fast and it
    is reasonable to assume a constant machine load throughout the test.
@@ -33,7 +33,7 @@ static const char rcsid[] =
 #define BIG_NUM (1024*1024)
 
 //! Random test data; generated values are in [0...MAX_ARRAY_VALUE-1]
-#define MAX_ARRAY_VALUE     1024    
+#define MAX_ARRAY_VALUE     1024
 
 //! Number of search methods tested
 #define N_METHODS   5
@@ -50,172 +50,172 @@ pixelvalue select_k(int, pixelvalue *, int);
 
 void bench(int verbose, size_t array_size)
 {
-    int         i ;
-    int         mednum ;
-    pixelvalue  med[N_METHODS] ;
+    int         i;
+    int         mednum;
+    pixelvalue  med[N_METHODS];
 
-    clock_t     chrono ;
-    double       elapsed ;
+    clock_t     chrono;
+    double       elapsed;
 
     pixelvalue  *   array_init,
-                *   array ;
+                *   array;
 
     //! Random number seed
     /*! Initialize random generator with PID.
         This is the only Unix-ish thing; can be replaced with an
         alternate scheme.
     */
-    srand48(getpid()) ;
+    srand48(getpid());
 
     if (verbose) {
-        printf("generating element values...\n") ;
-        fflush(stdout) ;
+        printf("generating element values...\n");
+        fflush(stdout);
     }
-    if (array_size<1) array_size = BIG_NUM ;
+    if (array_size<1) array_size = BIG_NUM;
 
     if (verbose) {
-        printf("array size: %ld\n", (long)array_size) ;
+        printf("array size: %ld\n", (long)array_size);
     } else {
-        printf("%ld\t", (long)array_size) ;
+        printf("%ld\t", (long)array_size);
     }
-    
-    array_init = malloc(array_size * sizeof(pixelvalue)) ;
-    array      = malloc(array_size * sizeof(pixelvalue)) ;
+
+    array_init = malloc(array_size * sizeof(pixelvalue));
+    array      = malloc(array_size * sizeof(pixelvalue));
 
     if (array_init==NULL || array==NULL) {
-        printf("memory allocation failure: aborting\n") ;
+        printf("memory allocation failure: aborting\n");
         return ;
     }
 
     for (i=0 ; i<array_size; i++) {
-        array_init[i] = (pixelvalue)(lrand48() % MAX_ARRAY_VALUE) ;
+        array_init[i] = (pixelvalue)(lrand48() % MAX_ARRAY_VALUE);
     }
-    mednum = 0 ;
+    mednum = 0;
 
     //! benchmark the quickselect sort
-    memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
+    memcpy(array, array_init, array_size * sizeof(pixelvalue));
     if (verbose) {
-        printf("quick select    :\t") ;
-        fflush(stdout) ;
+        printf("quick select    :\t");
+        fflush(stdout);
     }
-    chrono = clock() ;
-    med[mednum] = quick_select(array, array_size) ;
-    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC ;
+    chrono = clock();
+    med[mednum] = quick_select(array, array_size);
+    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC;
     if (verbose) {
-        printf("%5.3f sec\t", elapsed) ;
-        fflush(stdout) ;
-        printf("med %g\n", (double)med[mednum]) ;
-        fflush(stdout) ;
+        printf("%5.3f sec\t", elapsed);
+        fflush(stdout);
+        printf("med %g\n", (double)med[mednum]);
+        fflush(stdout);
     } else {
-        printf("%5.3f\t", elapsed) ;
-        fflush(stdout) ;
+        printf("%5.3f\t", elapsed);
+        fflush(stdout);
     }
-    mednum++ ;
+    mednum++;
 
     //! benchmark wirth function
-    memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
+    memcpy(array, array_init, array_size * sizeof(pixelvalue));
     if (verbose) {
-        printf("Wirth median    :\t") ;
-        fflush(stdout) ;
+        printf("Wirth median    :\t");
+        fflush(stdout);
     }
-    chrono = clock() ;
-    med[mednum] = wirth(array, array_size) ;
-    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC ;
+    chrono = clock();
+    med[mednum] = wirth(array, array_size);
+    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC;
     if (verbose) {
-        printf("%5.3f sec\t", elapsed) ;
-        fflush(stdout) ;
-        printf("med %g\n", (double)med[mednum]) ;
-        fflush(stdout) ;
+        printf("%5.3f sec\t", elapsed);
+        fflush(stdout);
+        printf("med %g\n", (double)med[mednum]);
+        fflush(stdout);
     } else {
-        printf("%5.3f\t", elapsed) ;
-        fflush(stdout) ;
+        printf("%5.3f\t", elapsed);
+        fflush(stdout);
     }
-    mednum++ ;
+    mednum++;
 
     //! benchmark AHU sort
-    memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
+    memcpy(array, array_init, array_size * sizeof(pixelvalue));
     if (verbose) {
-        printf("AHU median      :\t") ;
-        fflush(stdout) ;
+        printf("AHU median      :\t");
+        fflush(stdout);
     }
-    chrono = clock() ;
-    med[mednum] = median_AHU(array, array_size) ;
-    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC ;
+    chrono = clock();
+    med[mednum] = median_AHU(array, array_size);
+    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC;
     if (verbose) {
-        printf("%5.3f sec\t", elapsed) ;
-        fflush(stdout) ;
-        printf("med %g\n", (double)med[mednum]) ;
-        fflush(stdout) ;
+        printf("%5.3f sec\t", elapsed);
+        fflush(stdout);
+        printf("med %g\n", (double)med[mednum]);
+        fflush(stdout);
     } else {
-        printf("%5.3f\t", elapsed) ;
-        fflush(stdout) ;
+        printf("%5.3f\t", elapsed);
+        fflush(stdout);
     }
-    mednum++ ;
+    mednum++;
 
     //! benchmark torben's method
-    memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
+    memcpy(array, array_init, array_size * sizeof(pixelvalue));
     if (verbose) {
-        printf("torben          :\t") ;
-        fflush(stdout) ;
+        printf("torben          :\t");
+        fflush(stdout);
     }
-    chrono = clock() ;
-    med[mednum] = torben(array, array_size) ;
-    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC ;
+    chrono = clock();
+    med[mednum] = torben(array, array_size);
+    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC;
     if (verbose) {
-        printf("%5.3f sec\t", elapsed) ;
-        fflush(stdout) ;
-        printf("med %g\n", (double)med[mednum]) ;
-        fflush(stdout) ;
+        printf("%5.3f sec\t", elapsed);
+        fflush(stdout);
+        printf("med %g\n", (double)med[mednum]);
+        fflush(stdout);
     } else {
-        printf("%5.3f\t", elapsed) ;
-        fflush(stdout) ;
+        printf("%5.3f\t", elapsed);
+        fflush(stdout);
     }
-    mednum++ ;
+    mednum++;
 
     //! benchmark the eclipse fast pixel sort
-    memcpy(array, array_init, array_size * sizeof(pixelvalue)) ;
+    memcpy(array, array_init, array_size * sizeof(pixelvalue));
     if (verbose) {
-        printf("fast pixel sort :\t") ;
-        fflush(stdout) ;
+        printf("fast pixel sort :\t");
+        fflush(stdout);
     }
-    chrono = clock() ;
-    pixel_qsort(array, array_size) ;
-    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC ;
+    chrono = clock();
+    pixel_qsort(array, array_size);
+    elapsed = (double)(clock() - chrono) / (double)CLOCKS_PER_SEC;
 
     if (odd(array_size)) {
-        med[mednum] = array[array_size/2] ;
+        med[mednum] = array[array_size/2];
     } else {
-        med[mednum] = array[(array_size/2) -1] ;
+        med[mednum] = array[(array_size/2) -1];
     }
 
     if (verbose) {
-        printf("%5.3f sec\t", elapsed) ;
-        fflush(stdout) ;
-        printf("med %g\n", (double)med[mednum]) ;
-        fflush(stdout) ;
+        printf("%5.3f sec\t", elapsed);
+        fflush(stdout);
+        printf("med %g\n", (double)med[mednum]);
+        fflush(stdout);
     } else {
-        printf("%5.3f\t", elapsed) ;
-        fflush(stdout) ;
+        printf("%5.3f\t", elapsed);
+        fflush(stdout);
     }
-    mednum++ ;
+    mednum++;
 
-    free(array) ;
-    free(array_init) ;
+    free(array);
+    free(array_init);
 
     for (i=1 ; i<N_METHODS ; i++) {
         if (fabs(med[i-1] - med[i]) > 10 * FLT_EPSILON) {
-            printf("diverging median values!\n") ;
-            fflush(stdout) ;
+            printf("diverging median values!\n");
+            fflush(stdout);
         }
     }
-    printf("\n") ;
-    fflush(stdout) ;
-    return ;
+    printf("\n");
+    fflush(stdout);
+    return;
 }
 
 //! This function is only useful to the qsort() routine
 int compare(const void *f1, const void *f2)
-{ return ( *(pixelvalue*)f1 > *(pixelvalue*)f2) ? 1 : -1 ; } 
+{ return ( *(pixelvalue*)f1 > *(pixelvalue*)f2) ? 1 : -1 ; }
 
 
 /*! \fn void pixel_qsort(pixelvalue *, int)
@@ -238,14 +238,14 @@ void pixel_qsort(pixelvalue *pix_arr, int npix)
                 j,
                 k,
                 l;
-    int *       i_stack ;
-    int         j_stack ;
-    pixelvalue  a ;
+    int *       i_stack;
+    int         j_stack;
+    pixelvalue  a;
 
-    ir = npix ;
-    l = 1 ;
-    j_stack = 0 ;
-    i_stack = malloc(PIX_STACK_SIZE * sizeof(pixelvalue)) ;
+    ir = npix;
+    l = 1;
+    j_stack = 0;
+    i_stack = malloc(PIX_STACK_SIZE * sizeof(pixelvalue));
     for (;;) {
         if (ir-l < 7) {
             for (j=l+1 ; j<=ir ; j++) {
@@ -298,7 +298,7 @@ void pixel_qsort(pixelvalue *pix_arr, int npix)
             }
         }
     }
-    free(i_stack) ;
+    free(i_stack);
 }
 #undef PIX_STACK_SIZE
 #undef PIX_SWAP
@@ -317,42 +317,42 @@ pixelvalue select_k(int k, pixelvalue * list, int n)
 {
     int             n1 = 0,
                     n2 = 0,
-                    n3 = 0 ;
-    pixelvalue  *   S ;
-    int             i, j ;
-    pixelvalue      p ;
+                    n3 = 0;
+    pixelvalue  *   S;
+    int             i, j;
+    pixelvalue      p;
 
-    if (n==1) return list[0] ;
-    p = list[(n>>1)] ;
+    if (n==1) return list[0];
+    p = list[(n>>1)];
     for (i=0 ; i<n ; i++) {
         if (list[i]<p) {
-            n1++ ;
+            n1++;
         } else if (fabs(list[i] - p) < 10 * FLT_EPSILON) {
-            n2++ ;
+            n2++;
         } else {
-            n3++ ;
+            n3++;
         }
     }
     if (n1>=k) {
-        S = malloc(n1*sizeof(pixelvalue)) ;
-        j = 0 ;
+        S = malloc(n1*sizeof(pixelvalue));
+        j = 0;
         for (i=0 ; i<n ; i++) {
-            if (list[i]<p) S[j++] = list[i] ;
+            if (list[i]<p) S[j++] = list[i];
         }
-        p = select_k(k, S, n1) ;
-        free(S) ;
+        p = select_k(k, S, n1);
+        free(S);
     } else {
         if ((n1+n2)<k) {
-            S = malloc(n3 * sizeof(pixelvalue)) ;
-            j = 0 ;
+            S = malloc(n3 * sizeof(pixelvalue));
+            j = 0;
             for (i=0 ; i<n ; i++) {
-                if (list[i]>p) S[j++] = list[i] ;
+                if (list[i]>p) S[j++] = list[i];
             }
-            p = select_k(k-n1-n2, S, n3) ;
-            free(S) ;
+            p = select_k(k-n1-n2, S, n3);
+            free(S);
         }
     }
-    return p ;
+    return p;
 }
 
 
@@ -360,53 +360,51 @@ pixelvalue select_k(int k, pixelvalue * list, int n)
 pixelvalue median_AHU(pixelvalue * list, int n)
 {
     if (odd(n)) {
-        return select_k((n/2)+1, list, n) ;
+        return select_k((n/2)+1, list, n);
     } else {
-        return select_k((n/2), list, n) ;
+        return select_k((n/2), list, n);
     }
 }
 
 
 //! Main driver demo for median search routines
-int main(int argc, char * argv[]) 
+int main(int argc, char * argv[])
 {
-    int     i ;
-    int     from, to, step ;
-    int     count ;
+    int     i;
+    int     from, to, step;
+    int     count;
 
     if (argc<2) {
-        printf("usage:\n") ;
-        printf("%s <n>\n", argv[0]) ;
-        printf("\tif n=1 the output is verbose for one attempt\n") ;
-        printf("\tif n>1 the output reads:\n") ;
-        printf("\t# of elements | method1 | method2 | ...\n") ;
-        printf("\n") ;
-        printf("%s <from> <to> <step>\n", argv[0]) ;
-        printf("\twill loop over the number of elements in input\n") ;
-        printf("\n") ;
-        return 0 ;
+        printf("usage:\n");
+        printf("%s <n>\n", argv[0]);
+        printf("\tif n=1 the output is verbose for one attempt\n");
+        printf("\tif n>1 the output reads:\n");
+        printf("\t# of elements | method1 | method2 | ...\n");
+        printf("\n");
+        printf("%s <from> <to> <step>\n", argv[0]);
+        printf("\twill loop over the number of elements in input\n");
+        printf("\n");
+        exit(EXIT_FAILURE);
     }
 
     if (argc==2) {
-        count = atoi(argv[1]) ;
+        count = atoi(argv[1]);
         if (count==1) {
-            bench(1, BIG_NUM) ;
+            bench(1, BIG_NUM);
         } else {
-	    printf("Size\tQS\tWirth\tAHU\tTorben\tpixel sort\n") ;
+	    printf("Size\tQS\tWirth\tAHU\tTorben\tpixel sort\n");
             for (i=0 ; i<atoi(argv[1]) ; i++) {
-                bench(0, BIG_NUM) ;
+                bench(0, BIG_NUM);
             }
         }
     } else if (argc==4) {
-        from = atoi(argv[1]) ;
-        to   = atoi(argv[2]) ;
-        step = atoi(argv[3]) ;
+        from = atoi(argv[1]);
+        to   = atoi(argv[2]);
+        step = atoi(argv[3]);
         for (count=from ; count<=to ; count+=step) {
-            bench(0, count) ;
+            bench(0, count);
         }
-	return 0 ;
+	return EXIT_SUCCESS;
     }
-
+   return EXIT_SUCCESS;
 }
-
-
