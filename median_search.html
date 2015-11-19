@@ -362,15 +362,15 @@ median image filter.  The arguments allow for both a variable window
 size and an adaptive threshold parameter.  Aside from argument
 and error handling, the Python code uses both numpy and pillow
 (formerly Python Imaging Library) to manipulate image files and
-pixel arrays/vactors.  At the heart it can use either a numpy sort
+pixel arrays/vectors.  At the heart it can use either a numpy sort
 routine or a call to one of the C library functions to return the
 median of a 1D pixel array (and optionally apply the threshold
 parameter).
 
 <P>
 See the <A HREF="https://github.com/sarnold/adaptive-median">adaptive-median</A>
-repo on github for source code and a sample image.  Note the swig wrapper is
-currently old and broken :(
+repo on github for source code and a sample image.  Note the old swig wrapper
+is still old and broken :(
 
 
 <P>
