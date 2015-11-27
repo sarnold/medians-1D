@@ -531,11 +531,15 @@ Will the code work on my machine?</A>
 </H2>
 
 <P>
-Hopefully yes! There is no library call of any kind, it should
-work rightaway on any place that compiles C. The given code finds
-out the median out of a set of <EM>elements</EM>, up to you to
-specify the kind of elements you want to search. You could also
-apply templates in C++ to use the same code for any numeric type.
+Hopefully yes!  If you mean a modern a Linux box, then almost
+certainly yes (compiles fine with gcc 4.9.3 and glibc 2.22).  The shared library
+version is still in the autotools todo list, but it will dump a static lib
+to link against (see <A HREF="api/html/index.html">the API docs</A>).
+Run the autogen.sh script to configure/build the current source code.
+Each algorithm function in the library (or demo program) finds out the median
+out of a set of <EM>elements</EM>, it is up to you to specify the kind of elements
+you want to search. You could also apply templates in C++ to use the same 
+code for any numeric type.
 
 <P>
 
