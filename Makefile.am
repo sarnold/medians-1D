@@ -17,21 +17,15 @@ AM_LDFLAGS = -lm
 bin_PROGRAMS = demo
 
 demo_SOURCES = demo.c
+demo_LDADD = libmedians_1d.la
 
-noinst_LIBRARIES = libmedians_1d.a
-libmedians_1d_a_SOURCES = \
+lib_LTLIBRARIES = libmedians_1d.la
+libmedians_1d_la_SOURCES = \
             medians_1D.c
-
-LDADD = $(top_srcdir)/libmedians_1d.a
 
 SUFFIXES = .c .o .obj .i
 
 #EXTRA_DIST = doxygen ccccout
-
-include sources.mk
-
-MY_SRCS	= $(FULL_SOURCES)
-MY_INCS	= -I$(top_srcdir)
 
 $(DOCS)/.keep_dir :
 	mkdir -p $(dir $@)
