@@ -12,3 +12,4 @@ All the functions take the same input parameters and return the
 same output.  The typedef should be changed as appropriate for 
 the input data.
 
+Integrates with https://github.com/sarnold/adaptive-median
