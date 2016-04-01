@@ -2,11 +2,11 @@ AC_INIT([medians_1D], [0.9], [stephen.arnold42@gmail.com])
 
 AM_INIT_AUTOMAKE([foreign -Wall])
 AM_PROG_AR
+LT_INIT()
 
 dnl Check for programs
 AC_PROG_CC
 AC_PROG_INSTALL
-AC_PROG_RANLIB
 
 dnl Check for header files
 AC_HEADER_STDC
